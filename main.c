@@ -12,9 +12,9 @@ int main() {
 	int sec;//초
 	int sec2;//시간분출력을 위한 중간변수
 	int overtime;//초과근무계산에 사용할 초
-	int overhour=0;//초과근무 시
-	int overmin=0;//초과근무 분
-	int oversec=0;//초과근무 초
+	int overhour;//초과근무 시
+	int overmin;//초과근무 분
+	int oversec;//초과근무 초
 	int oversec2;//초과시분 출력을 위한 중간변수
 	int family;//부양가족수
 	int card;//신용카드사용액
@@ -82,11 +82,11 @@ int main() {
 		return 0;
 	}
 
-	else if (age >= 18 && age < 25) maxWorkhour = 7;
+	else if (age >= 18 && age < 25) {maxWorkhour = 7;}
 
-	else if (age >= 25 && age < 55) maxWorkhour = 9;
+	else if (age >= 25 && age < 55) {maxWorkhour = 9;}
 
-	else if (age >= 55 && age < 65) maxWorkhour = 5;
+	else if (age >= 55 && age < 65) {maxWorkhour = 5;}
 
 	else maxWorkhour = 3;
 
@@ -114,7 +114,7 @@ int main() {
 
 	overtime = Workhour - (3600 * maxWorkhour);
 
-	if (overtime > 3600 * maxWorkhour) {
+	if (overtime > 0) {
 		overhour = overtime / 3600;/*초과근무의시간*/
 		oversec2 = overtime % 3600;/*초과근무 분초를 위한 중간변수*/
 		overmin = oversec2 / 60;/*초과근무의분*/
@@ -125,14 +125,17 @@ int main() {
 	
 	}
 	else if(overtime <= 0){
-	overhour, overmin = 0;
+	//초과근무초가 0보다 같거나 작을때 모든 초과근무 변수를 0으로 초기화해줌.
+	overhour = 0;
+	overmin = 0;
+	oversec = 0;
 	}
 	
 
 	//급여계산 
 	money = hour * 12000;
 	
-	if (overtime >= 1) {
+	if (overtime > 0) {
 		money = maxWorkhour * 12000;//초과근무가 있으면 최대근무시간은 채운거랑 같음
 		overmoney = (overtime / 60) * 100;//초과근무 급여계산
 		allmoney = money + overmoney;//기본급여+초과근무급여 합
@@ -146,9 +149,9 @@ int main() {
 	//환급액계산
 
 	refund = family * 2000;
-	if (allmoney * 0.3 < card) refund += (card * 0.1); //신용카드 환급
+	if ((allmoney * 0.3) < card) refund += (card * 0.1); //신용카드 환급
 
-	if (allmoney * 0.3 < checkcard) refund += (checkcard * 0.2);//체크카드 환급
+	if ((allmoney * 0.3) < checkcard) refund += (checkcard * 0.2);//체크카드 환급
 
 	//소득액에 따른 세율
 	if (allmoney < 30000) duty = allmoney * 0.05;
@@ -160,7 +163,8 @@ int main() {
 	finalmoney = allmoney - duty + refund;
 
 	printf("사원번호:%d\n나이:%d\n근무시간:%d시%d분\n초과근무시간:%d시%d분\n기본급여:%d\n초과근무수당:%d\n세전급여:%d\n",staffnum,age,hour,min,overhour,overmin,money,overmoney,allmoney);
-	printf("환금액:%d\n세금:%d\n세후급여:%d\n",refund,duty,finalmoney);
+	printf("신용카드사용액:%d\n체크카드사용액:%d\n환금액:%d\n세금:%d\n세후급여:%d\n",card,checkcard,refund,duty,finalmoney);
+
 
 	return 0;
 }
